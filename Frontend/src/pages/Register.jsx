@@ -8,8 +8,9 @@ const RegisterPage = () => {
     name: '',
     email: '',
     password: '',
-    confirmPassword: '', // For client-side password confirmation
-    role: 'customer', // Default role for registration, align with backend User model
+    phone: '',
+    address: '',
+    role: 'supplier',
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false); // State for loading indicator
@@ -38,12 +39,20 @@ const RegisterPage = () => {
     setLoading(true); // Start loading
 
     try {
-      await registerUser(form.name, form.email, form.password, form.role);
+      await registerUser(
+        form.name,
+        form.email,
+        form.password,
+        form.phone,
+        form.role,
+        form.address
+      );
+      navigate('/login');
 
       setSuccessMessage('Registration successful! Redirecting to login...');
       setTimeout(() => {
         navigate('/login');
-      }, 1500); 
+      }, 1500);
 
     } catch (err) {
       console.error('Registration failed:', err);
