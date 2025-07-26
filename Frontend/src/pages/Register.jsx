@@ -10,8 +10,6 @@ const RegisterPage = () => {
     password: '',
     phone: '',
     address: '',
-    coordinates: '', // Will be split into array on submit
-    trustCertificate: '', // Comma separated string, will be split into array
     role: 'supplier',
   });
   const [error, setError] = useState('');
@@ -41,32 +39,21 @@ const RegisterPage = () => {
     setLoading(true); // Start loading
 
     try {
-<<<<<<< HEAD
-<<<<<<< HEAD
       await registerUser(
         form.name,
         form.email,
         form.password,
         form.phone,
         form.role,
-        form.address,
-        form.coordinates,
-        form.trustCertificate
+        form.address
       );
       navigate('/login');
-=======
-      // Call your backend registerUser API
-      // Ensure the API function expects these parameters in this order or as an object
-=======
->>>>>>> f34440e1fa832d9d7b834b35cca5c4c08889bd3f
-      await registerUser(form.name, form.email, form.password, form.role);
 
       setSuccessMessage('Registration successful! Redirecting to login...');
       setTimeout(() => {
         navigate('/login');
-      }, 1500); 
+      }, 1500);
 
->>>>>>> 31ce185e484edcc52ea8e50202075cc7e3a97002
     } catch (err) {
       console.error('Registration failed:', err);
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
@@ -93,70 +80,6 @@ const RegisterPage = () => {
           </div>
         )}
 
-<<<<<<< HEAD
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={form.name}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <input
-          type="text"
-          name="phone"
-          placeholder="Phone Number"
-          value={form.phone}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <input
-          type="text"
-          name="address"
-          placeholder="Address"
-          value={form.address}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <input
-          type="text"
-          name="coordinates"
-          placeholder="Coordinates (comma separated, e.g. 77.1,28.6)"
-          value={form.coordinates}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <input
-          type="text"
-          name="trustCertificate"
-          placeholder="Trust Certificates (comma separated URLs)"
-          value={form.trustCertificate}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
-        />
-=======
         <form onSubmit={handleSubmit} className="space-y-5"> {/* Adjusted spacing */}
           <div>
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
@@ -172,7 +95,6 @@ const RegisterPage = () => {
               disabled={loading}
             />
           </div>
->>>>>>> 31ce185e484edcc52ea8e50202075cc7e3a97002
 
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
