@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import connectToDatabase from './config/database.js';
 import authRoutes from './routes/authRoutes.js';
+import productRoutes from './routes/ProductRoute.js';
 import cookieParser from 'cookie-parser';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
@@ -31,6 +32,7 @@ app.get('/', (req, res) => {
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/product', productRoutes);
 
 app.use(notFound);       // 404 handler
 app.use(errorHandler);   // general error handler
