@@ -1,11 +1,26 @@
 import express from "express";
 import asyncHandler from '../middleware/asyncHandler.js';
 import { protect } from '../middleware/authMiddleware.js';
-import { createProductRequest } from '../controllers/product.Controller.js';
+import { createProductRequest, isOutFoStock ,updateProductMedia} from '../controllers/product.Controller.js';
 import { upload } from '../middleware/uploadMiddleware.js';
 
-const router = express.Router();
+const ProductRouter = express.Router();
 
-router.post("/create-product-request", protect, upload.array('attachments'), asyncHandler(createProductRequest));
+router.route('/create-product').post(protect, upload.fields([{
+    name: 'image',
+}, {
+    name: 'attachments',
+    
+}]), asyncHandler(createProductRequest));
 
-export default router;
+router.route('/is-out-of-stock').post(protect, asyncHandler(isOutFoStock));
+
+router.route('/update-product-media').post(protect, upload.fields([{
+    name: 'image',
+}, {
+    name: 'attachments',
+    
+}]), asyncHandler(updateProductMedia));
+
+
+export default ProductRouter;
