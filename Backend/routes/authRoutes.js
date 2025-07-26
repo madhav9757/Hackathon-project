@@ -3,7 +3,7 @@ import asyncHandler from '../middleware/asyncHandler.js';
 import { registerUser, loginUser, logoutUser, getProfile } from '../controllers/authController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
-const AuthRouter = express.Router();
+const router= express.Router();
 
 // @route   POST /api/users/register
 router.post('/register', asyncHandler(registerUser));
@@ -17,4 +17,4 @@ router.post('/logout', asyncHandler(logoutUser));
 // @route   GET /api/users/profile
 router.get('/profile', protect, asyncHandler(getProfile));
 
-export default AuthRouter;
+export default router;
