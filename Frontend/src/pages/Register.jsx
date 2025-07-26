@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { registerUser } from '../api/auth'; // Ensure this path is correct
+import { registerUser } from '../app/api/auth'; // Ensure this path is correct
 import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
@@ -42,6 +42,7 @@ const RegisterPage = () => {
 
     try {
 <<<<<<< HEAD
+<<<<<<< HEAD
       await registerUser(
         form.name,
         form.email,
@@ -56,21 +57,21 @@ const RegisterPage = () => {
 =======
       // Call your backend registerUser API
       // Ensure the API function expects these parameters in this order or as an object
+=======
+>>>>>>> f34440e1fa832d9d7b834b35cca5c4c08889bd3f
       await registerUser(form.name, form.email, form.password, form.role);
-      
+
       setSuccessMessage('Registration successful! Redirecting to login...');
-      // Give user a moment to see the success message before redirecting
       setTimeout(() => {
         navigate('/login');
-      }, 1500); // Redirect after 1.5 seconds
+      }, 1500); 
 
 >>>>>>> 31ce185e484edcc52ea8e50202075cc7e3a97002
     } catch (err) {
       console.error('Registration failed:', err);
-      // Display error message from backend or a generic one
       setError(err.response?.data?.message || 'Registration failed. Please try again.');
     } finally {
-      setLoading(false); // Stop loading
+      setLoading(false);
     }
   };
 
@@ -78,7 +79,7 @@ const RegisterPage = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-white px-4">
       <div className="max-w-md w-full bg-white shadow-lg rounded-2xl p-8"> {/* Main container matching LoginPage */}
         <h2 className="text-2xl font-semibold text-center text-indigo-700 mb-6">Register for Your Account</h2>
-        
+
         {/* Error Message Display */}
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
@@ -228,8 +229,7 @@ const RegisterPage = () => {
               className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
               disabled={loading}
             >
-              {/* Aligned with backend User model roles: 'admin', 'vendor', 'customer' */}
-              {/* Typically, 'admin' role is not self-registered */}
+
               <option value="customer">Customer</option>
               <option value="vendor">Vendor</option>
             </select>
