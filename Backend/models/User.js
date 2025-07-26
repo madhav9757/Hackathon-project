@@ -23,25 +23,13 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "vendor", "supplier"],
-      default: "supplier",
+      enum: ["admin", "vendor", "supplier", "customer"],
+      default: "customer",
     },
     address: {
       type: String,
       required: true,
-    },
-    coordinates: {
-      type: [Number],
-      required: true,
-    },
-    trustCertificate: [{
-      type: String,
-    }],
-    points: {
-      //only for supplier
-      type: Number,
-      default: 0,
-    }
+    },    
   },
   { timestamps: true }
 );
