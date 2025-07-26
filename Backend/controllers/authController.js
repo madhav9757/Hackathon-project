@@ -81,29 +81,3 @@ export const getProfile = async (req, res) => {
     throw new Error('User not found');
   }
 };
-
-const updateProfile = async (req, res) => {
-  const { name, email, phone, address } = req.body;
-  const user = await User.findById(req.user._id);
-  if (user) {
-    user.name = name || user.name;
-    user.email = email || user.email;
-    user.phone = phone || user.phone;
-    user.address = address || user.address;
-
-    const updatedUser = await user.save();
-
-    res.status(200).json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      phone: updatedUser.phone,
-      address: updatedUser.address,
-    });
-  } else {
-    res.status(404);
-    throw new Error('User not found');
-  }
-};
-
-export { updateProfile };
