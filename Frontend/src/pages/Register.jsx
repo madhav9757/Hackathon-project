@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { registerUser } from '../api/auth';
+import { registerUser } from '../api/auth'; // Ensure this path is correct
 import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
@@ -8,9 +8,12 @@ const RegisterPage = () => {
     name: '',
     email: '',
     password: '',
-    role: 'student',
+    confirmPassword: '', // For client-side password confirmation
+    role: 'customer', // Default role for registration, align with backend User model
   });
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false); // State for loading indicator
+  const [successMessage, setSuccessMessage] = useState(''); // State for success message
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -18,66 +21,147 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Clear previous errors
+    setSuccessMessage(''); // Clear previous success messages
+
+    // Basic client-side validation
+    if (form.password !== form.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+    if (form.password.length < 6) { // Example: minimum password length
+      setError('Password must be at least 6 characters long');
+      return;
+    }
+    // You can add more client-side validation here (e.g., email format check)
+
+    setLoading(true); // Start loading
+
     try {
+      // Call your backend registerUser API
+      // Ensure the API function expects these parameters in this order or as an object
       await registerUser(form.name, form.email, form.password, form.role);
-      navigate('/login');
+      
+      setSuccessMessage('Registration successful! Redirecting to login...');
+      // Give user a moment to see the success message before redirecting
+      setTimeout(() => {
+        navigate('/login');
+      }, 1500); // Redirect after 1.5 seconds
+
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed');
+      console.error('Registration failed:', err);
+      // Display error message from backend or a generic one
+      setError(err.response?.data?.message || 'Registration failed. Please try again.');
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
-      <form onSubmit={handleSubmit} className="bg-white shadow-lg p-8 rounded w-full max-w-md space-y-4">
-        <h2 className="text-2xl font-semibold text-center">Register</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 to-white px-4">
+      <div className="max-w-md w-full bg-white shadow-lg rounded-2xl p-8"> {/* Main container matching LoginPage */}
+        <h2 className="text-2xl font-semibold text-center text-indigo-700 mb-6">Register for Your Account</h2>
         
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+        {/* Error Message Display */}
+        {error && (
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span className="block sm:inline">{error}</span>
+          </div>
+        )}
+        {/* Success Message Display */}
+        {successMessage && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <span className="block sm:inline">{successMessage}</span>
+          </div>
+        )}
 
-        <input
-          type="text"
-          name="name"
-          placeholder="Name"
-          value={form.name}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
-          required
-        />
+        <form onSubmit={handleSubmit} className="space-y-5"> {/* Adjusted spacing */}
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Your Name"
+              value={form.name}
+              onChange={handleChange}
+              className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              required
+              disabled={loading}
+            />
+          </div>
 
-        <select
-          name="role"
-          value={form.role}
-          onChange={handleChange}
-          className="w-full border px-3 py-2 rounded"
-        >
-          <option value="student">Vendor</option>
-          <option value="recruiter">Coustomer</option>
-        </select>
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="you@example.com"
+              value={form.email}
+              onChange={handleChange}
+              className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              required
+              disabled={loading}
+            />
+          </div>
 
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-        >
-          Register
-        </button>
-      </form>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="••••••••"
+              value={form.password}
+              onChange={handleChange}
+              className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+            <input
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="••••••••"
+              value={form.confirmPassword}
+              onChange={handleChange}
+              className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <div>
+            <label htmlFor="role" className="block text-sm font-medium text-gray-700">Register as</label>
+            <select
+              id="role"
+              name="role"
+              value={form.role}
+              onChange={handleChange}
+              className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              disabled={loading}
+            >
+              {/* Aligned with backend User model roles: 'admin', 'vendor', 'customer' */}
+              {/* Typically, 'admin' role is not self-registered */}
+              <option value="customer">Customer</option>
+              <option value="vendor">Vendor</option>
+            </select>
+          </div>
+
+          <button
+            type="submit"
+            className="w-full py-2 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={loading} // Disable button when loading
+          >
+            {loading ? 'Registering...' : 'Register'}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
