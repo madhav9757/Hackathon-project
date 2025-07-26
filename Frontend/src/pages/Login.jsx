@@ -1,13 +1,13 @@
-// src/pages/LoginPage.jsx
 import React, { useState } from 'react';
-import { loginUser as apiLoginUser } from '../api/auth'; // Renamed to avoid conflict
+import { loginUser as apiLoginUser } from '../app/api/auth'; // Renamed to avoid conflict
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; // Import useAuth hook
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [roleSelection, setRoleSelection] = useState('vendor'); // Renamed to avoid conflict with user.role
+  // Removed: const [roleSelection, setRoleSelection] = useState('vendor'); 
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const { login } = useAuth(); // Get the login function from context
@@ -16,11 +16,12 @@ export default function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError('');
+    setError(''); // Clear previous errors
 
     try {
       const userData = await apiLoginUser(email, password);
-      login(userData); // Update context and localStorage
+
+      login(userData); // Update context and localStorage with the actual user data from backend
       console.log('Login successful:', userData);
 
       // Redirect user based on their actual role received from the backend
@@ -31,14 +32,15 @@ export default function LoginPage() {
       } else if (userData.role === 'customer') {
         navigate('/customer-dashboard');
       } else {
-        navigate('/dashboard'); // Fallback
+        navigate('/dashboard'); // Fallback for unknown roles or general dashboard
       }
 
     } catch (err) {
       console.error('Login error:', err);
+      // Display error message from backend or a generic one
       setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
     } finally {
-      setLoading(false);
+      setLoading(false); // Set loading to false after API call completes
     }
   };
 
@@ -64,7 +66,7 @@ export default function LoginPage() {
               onChange={(e) => setEmail(e.target.value)}
               className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
               placeholder="you@example.com"
-              disabled={loading}
+              disabled={loading} // Disable input during loading
             />
           </div>
 
@@ -78,29 +80,14 @@ export default function LoginPage() {
               onChange={(e) => setPassword(e.target.value)}
               className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
               placeholder="••••••••"
-              disabled={loading}
+              disabled={loading} // Disable input during loading
             />
-          </div>
-
-          <div>
-            <label htmlFor="roleSelection" className="block text-sm font-medium text-gray-700">Login as</label>
-            <select
-              id="roleSelection" // Changed ID
-              value={roleSelection}
-              onChange={(e) => setRoleSelection(e.target.value)}
-              className="w-full mt-1 px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              disabled={loading}
-            >
-              <option value="vendor">Vendor</option>
-              <option value="customer">Customer</option>
-              <option value="admin">Admin</option>
-            </select>
           </div>
 
           <button
             type="submit"
             className="w-full py-2 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={loading}
+            disabled={loading} // Disable button during loading
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
