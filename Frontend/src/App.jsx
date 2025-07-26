@@ -1,11 +1,16 @@
-import React from 'react'
+import React from 'react';
+import AppRouter from './router'; 
+import Navbar from './components/Navbar/Header';
 
-const App = () => {
+function App() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold">Hello, Tailwind CSS!</h1>
+    <div className="min-h-screen bg-gray-100 text-gray-900">
+      <Navbar />
+      <main className="p-4">
+        <AppRouter />
+      </main>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
