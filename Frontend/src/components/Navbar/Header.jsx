@@ -1,7 +1,7 @@
 // src/components/Navbar.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X } from 'lucide-react'; // For the mobile menu icons
+import { Menu, X, User as UserIcon } from 'lucide-react'; // Import User icon
 import { useAuth } from '../../context/AuthContext'; // Import useAuth hook to access global auth state
 
 export default function Navbar() {
@@ -49,8 +49,13 @@ export default function Navbar() {
             
             {/* Conditional Links based on Authentication Status */}
             {user ? (
-              // If user is logged in
+              // If user is logged in: Show user's name, profile link, dashboard link, and logout button
               <>
+                <span className="text-gray-700 font-medium">Hello, {user.name}!</span>
+                <Link to="/profile" className="text-gray-700 hover:text-indigo-600 flex items-center space-x-1">
+                  <UserIcon size={18} />
+                  <span>Profile</span>
+                </Link>
                 {renderDashboardLink()} {/* Render role-specific dashboard link */}
                 <button 
                   onClick={handleLogout} 
@@ -60,7 +65,7 @@ export default function Navbar() {
                 </button>
               </>
             ) : (
-              // If user is NOT logged in
+              // If user is NOT logged in: Show Register and Login links
               <>
                 <Link to="/register" className="text-gray-700 hover:text-indigo-600">Register</Link>
                 <Link to="/login" className="px-4 py-1 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition duration-200">Login</Link>
@@ -85,6 +90,11 @@ export default function Navbar() {
           {user ? (
             // If user is logged in (Mobile View)
             <>
+              <span className="block text-gray-700 font-medium py-2">Hello, {user.name}!</span>
+              <Link to="/profile" className="block text-gray-700 hover:text-indigo-600 py-2 flex items-center space-x-1" onClick={() => setIsOpen(false)}>
+                <UserIcon size={18} />
+                <span>Profile</span>
+              </Link>
               {/* Role-specific dashboard links for mobile */}
               {user.role === 'vendor' && <Link to="/vendor-dashboard" className="block text-gray-700 hover:text-indigo-600 py-2" onClick={() => setIsOpen(false)}>Vendor Dashboard</Link>}
               {user.role === 'customer' && <Link to="/customer-dashboard" className="block text-gray-700 hover:text-indigo-600 py-2" onClick={() => setIsOpen(false)}>Customer Dashboard</Link>}
