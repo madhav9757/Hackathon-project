@@ -7,8 +7,8 @@ import HomePage from './pages/Home';
 export default function AppRouter() {
   return (
     <Routes>
+      <Route path="/login" element={<LoginPage />} />
       <Route path="/" element={<HomePage />} />
-      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 }
