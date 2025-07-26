@@ -7,8 +7,11 @@ export const protect = async (req, res, next) => {
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      req.user = await User.findById(decoded.userId).select('-password');
-      req.user.role = decoded.role;
+      const user = await User.findById(decoded.userId).select('-password');
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      req.user = user; // Attach the whole user object (excluding password)
       next();
     } catch (error) {
       res.status(401).json({ message: 'Not authorized, token failed' });

@@ -15,8 +15,24 @@ export const loginUser = async (email, password) => {
 };
 
 // Register user
-export const registerUser = async (name, email, password) => {
-  const res = await axiosInstance.post('/register', { name, email, password });
+export const registerUser = async (name, email, password, phone, role, address, coordinates, trustCertificate) => {
+  // Convert coordinates and trustCertificate to arrays if needed
+  const coordinatesArray = coordinates
+    ? coordinates.split(',').map((c) => parseFloat(c.trim()))
+    : [];
+  const trustCertificateArray = trustCertificate
+    ? trustCertificate.split(',').map((c) => c.trim())
+    : [];
+  const res = await axiosInstance.post('/register', {
+    name,
+    email,
+    password,
+    phone,
+    role,
+    address,
+    coordinates: coordinatesArray,
+    trustCertificate: trustCertificateArray,
+  });
   return res.data;
 };
 

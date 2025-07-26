@@ -8,7 +8,11 @@ const RegisterPage = () => {
     name: '',
     email: '',
     password: '',
-    role: 'student',
+    phone: '',
+    address: '',
+    coordinates: '', // Will be split into array on submit
+    trustCertificate: '', // Comma separated string, will be split into array
+    role: 'supplier',
   });
   const [error, setError] = useState('');
 
@@ -19,7 +23,16 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await registerUser(form.name, form.email, form.password, form.role);
+      await registerUser(
+        form.name,
+        form.email,
+        form.password,
+        form.phone,
+        form.role,
+        form.address,
+        form.coordinates,
+        form.trustCertificate
+      );
       navigate('/login');
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed');
@@ -59,6 +72,41 @@ const RegisterPage = () => {
           onChange={handleChange}
           className="w-full border px-3 py-2 rounded"
           required
+        />
+        <input
+          type="text"
+          name="phone"
+          placeholder="Phone Number"
+          value={form.phone}
+          onChange={handleChange}
+          className="w-full border px-3 py-2 rounded"
+          required
+        />
+        <input
+          type="text"
+          name="address"
+          placeholder="Address"
+          value={form.address}
+          onChange={handleChange}
+          className="w-full border px-3 py-2 rounded"
+          required
+        />
+        <input
+          type="text"
+          name="coordinates"
+          placeholder="Coordinates (comma separated, e.g. 77.1,28.6)"
+          value={form.coordinates}
+          onChange={handleChange}
+          className="w-full border px-3 py-2 rounded"
+          required
+        />
+        <input
+          type="text"
+          name="trustCertificate"
+          placeholder="Trust Certificates (comma separated URLs)"
+          value={form.trustCertificate}
+          onChange={handleChange}
+          className="w-full border px-3 py-2 rounded"
         />
 
         <select
