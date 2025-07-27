@@ -24,12 +24,13 @@ export default function LoginPage() {
       login(userData); // Update context and localStorage with the actual user data from backend
       console.log('Login successful:', userData);
 
-      // Redirect user based on their actual role received from the backend
-      if (userData.role === 'admin') {
+      const { _id, role, name, email } = userData;
+
+      if (role == 'admin') {
         navigate('/admin-dashboard');
-      } else if (userData.role === 'vendor') {
+      } else if (role == 'vendor') {
         navigate('/vendor-dashboard');
-      } else if (userData.role === 'customer') {
+      } else if (role == 'customer') {
         navigate('/customer-dashboard');
       } else {
         navigate('/dashboard'); // Fallback for unknown roles or general dashboard

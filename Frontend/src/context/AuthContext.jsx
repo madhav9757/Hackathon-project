@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
+  const [LoginSuccess, setLoginSuccess] = useState(false);
   const [user, setUser] = useState(null); // Stores user data
   const [loading, setLoading] = useState(true); // Manages initial loading state
   const navigate = useNavigate(); // For programmatic redirection within context
@@ -15,7 +16,7 @@ export const AuthProvider = ({ children }) => {
     const loadUser = async () => {
       try {
         setLoading(true);
-        const userData = await getUserProfile(); // Attempt to fetch profile (backend will check cookie)
+        const userData = await getUserProfile(); 
         setUser(userData);
       } catch (error) {
         console.error("Failed to load user profile:", error);
@@ -30,8 +31,9 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     try {
       const userData = await loginUser(email, password);
+      setLoginSuccess(true);
       setUser(userData);
-      return userData; // Return user data on success
+      return userData;
     } catch (error) {
       console.error("Login failed:", error);
       throw error; // Re-throw for component to handle

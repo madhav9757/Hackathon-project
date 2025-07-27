@@ -3,11 +3,12 @@ import User from '../models/User.js';
 
 export const protect = async (req, res, next) => {
   let token = req.cookies.jwt;
+  console.log('Token:', token); // Debugging line to check if token is being received
 
   if (token) {
     try {
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-      const user = await User.findById(decoded.userId).select('-password');
+      const user = await User.indById(decoded.userId).select('-password');
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
@@ -16,8 +17,9 @@ export const protect = async (req, res, next) => {
     } catch (error) {
       res.status(401).json({ message: 'Not authorized, token failed' });
     }
-  } else {
-    res.status(401).json({ message: 'Not authorized, no token' });
+  }
+  else {
+    res.status(401).json({ message: 'No Token Found' });
   }
 };
 

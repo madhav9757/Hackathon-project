@@ -1,12 +1,9 @@
-// src/app/api/auth.js
 import axios from 'axios';
-// Import API_URL_AUTH, which resolves to http://localhost:3000/api/auth
 import { API_URL_AUTH } from '../constant'; 
 
-// Create an Axios instance specifically for authentication endpoints
-const authApiClient = axios.create({ // Renamed to authApiClient for clarity
-  baseURL: API_URL_AUTH, // Set the base URL here to http://localhost:3000/api/auth
-  withCredentials: true, // Required to send/receive cookies (like your JWT)
+const authApiClient = axios.create({
+  baseURL: API_URL_AUTH, 
+  withCredentials: true,
 });
 
 // Optional: Add a response interceptor for global error handling (e.g., 401 Unauthorized)
@@ -24,16 +21,14 @@ authApiClient.interceptors.response.use(
 
 // Login user
 export const loginUser = async (email, password) => {
-  // Use relative path '/login' because baseURL is already set to API_URL_AUTH
   const res = await authApiClient.post('/login', { email, password });
-  return res.data; // returns user object
+  return res.data; 
 };
 
 // Register user
 // IMPORTANT: Ensure the function signature includes phone and address
 // Make sure you are passing phone and address from your RegisterPage component!
 export const registerUser = async (name, email, password, phone, address, role) => {
-  // Use relative path '/register' because baseURL is already set to API_URL_AUTH
   const res = await authApiClient.post('/register', {
     name,
     email,
@@ -47,14 +42,12 @@ export const registerUser = async (name, email, password, phone, address, role) 
 
 // Logout user
 export const logoutUser = async () => {
-  // Use relative path '/logout'
   const res = await authApiClient.post('/logout');
   return res.data;
 };
 
 // Get current user profile
 export const getUserProfile = async () => {
-  // Use relative path '/profile'
   const res = await authApiClient.get('/profile');
   return res.data;
 };

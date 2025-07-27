@@ -45,7 +45,7 @@ export const loginUser = async (req, res) => {
     return res.status(401).json({ message: 'Invalid email or password' });
   }
 
-  generateToken(res, user._id, user.role);
+   const token =  await generateToken(res, user._id, user.role);
 
   // Removed: coordinates, trustCertificate, points from the response
   res.json({
@@ -55,6 +55,7 @@ export const loginUser = async (req, res) => {
     phone: user.phone,
     role: user.role,
     address: user.address,
+    token: token
   });
 };
 
@@ -64,8 +65,11 @@ export const logoutUser = (req, res) => {
 };
 
 export const getProfile = async (req, res) => {
-  const user = await User.findById(req.user._id);
+  if (!req.user||!req.user._id) {
+    return res.status(401).json({ message: 'NO lOgin' });
+  }
 
+  const user = await User.findById(req.user._id);
   if (user) {
     // These fields remain here as getProfile is intended to provide complete user details
     res.json({
